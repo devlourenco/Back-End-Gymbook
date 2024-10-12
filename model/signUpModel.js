@@ -26,6 +26,6 @@ const modelSignUp = connection.define("Cadastro", {
   },
 });
 
-// modelSignUp.sync({ force: true });
+modelSignUp.sync({ force: true });
 
 module.exports = modelSignUp;

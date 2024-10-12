@@ -1,16 +1,15 @@
 const express = require("express");
-
 const signUpModel = require("../model/signUpModel");
 
-const router = express.router();
+const router = express.Router();
 
-router.post("/  ", (req, res) => {
+router.post("/signup", (req, res) => {
   let { email, nome_usuario, senha } = req.body;
 
   signUpModel
     .create({
-      email,
       nome_usuario,
+      email,
       senha,
     })
     .then(() => {
@@ -22,47 +21,63 @@ router.post("/  ", (req, res) => {
     .catch((error) => {
       return res.status(400).json({
         errorStatus: true,
-        mensageStatus: "erro ao criar usuário",
+        mensageStatus: "Erro ao criar usuário",
         errorObject: error,
       });
     });
 });
 
-router.get("/listUsers", (req, res) => {
+router.get("/listUsers/:idCadastro", (req, res) => {
   let { idCadastro } = req.params;
 
   signUpModel
     .findByPk(idCadastro)
-    .then((res) => {
-      return res.status(201).json({
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({
+          errorStatus: true,
+          mensageStatus: "Usuário não encontrado",
+        });
+      }
+      return res.status(200).json({
         errorStatus: false,
         mensageStatus: "Listagem de usuários",
+        user,
       });
     })
     .catch((error) => {
       return res.status(401).json({
         errorStatus: true,
-        mensageStatus: "erro ao listar usuários",
+        mensageStatus: "Erro ao listar usuários",
         errorObject: error,
       });
     });
 });
 
-router
-  .delete("/deleteUser/:idCadastro", (req, res) => {
-    let { idCadastro } = req.params;
-    signUpModel.destroy({ where: idCadastro });
-  })
-  .then(
-    res.status(201).json({
-      errorStatus: false,
-      mensageStatus: "Usuário deletado com sucesso!",
+router.delete("/deleteUser/:idCadastro", (req, res) => {
+  let { idCadastro } = req.params;
+
+  signUpModel
+    .destroy({ where: { id: idCadastro } })
+    .then((deleted) => {
+      if (!deleted) {
+        return res.status(404).json({
+          errorStatus: true,
+          mensageStatus: "Usuário não encontrado",
+        });
+      }
+      return res.status(200).json({
+        errorStatus: false,
+        mensageStatus: "Usuário deletado com sucesso!",
+      });
     })
-  )
-  .catch((error) => {
-    return res.status(401).json({
-      errorStatus: true,
-      mensageStatus: "erro ao deletar usuário",
-      errorObject: error,
+    .catch((error) => {
+      return res.status(401).json({
+        errorStatus: true,
+        mensageStatus: "Erro ao deletar usuário",
+        errorObject: error,
+      });
     });
-  });
+});
+
+module.exports = router;
