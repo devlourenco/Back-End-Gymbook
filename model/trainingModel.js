@@ -2,30 +2,30 @@ const { Sequelize, DataTypes } = require("sequelize");
 
 const connection = require("../database/database");
 
-const modelSignUp = connection.define("Cadastro", {
-  idCadastro: {
+const modelTraining = connection.define("Treino", {
+  idTreino: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
-  email: {
+  grupo_muscular: {
     type: DataTypes.STRING(100),
     allowNull: true,
   },
-  nome_usuario: {
+  exercicios: {
     type: DataTypes.STRING(100),
     allowNull: true,
   },
-  senha: {
-    type: DataTypes.STRING(100),
+  repeticoes: {
+    type: DataTypes.INTEGER,
     allowNull: true,
   },
-  data_criacao: {
-    type: DataTypes.DATE,
+  carga_do_treino: {
+    type: DataTypes.INTEGER,
     allowNull: true,
   },
 });
 
-// modelSignUp.sync({ force: true });
+// modelTraining.sync({ force: true });
 
-module.exports = modelSignUp;
+module.exports = modelTraining;
