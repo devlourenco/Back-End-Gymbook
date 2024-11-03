@@ -6,8 +6,8 @@ const modelTraining = require("./routes/trainingRoute")
 
 
 // linha para rodar a inicialização da tabela de cadastro.
-const signUpModel = require('./model/signUpModel');
-const trainingModel = require("./model/trainingModel")
+// const signUpModel = require('./model/signUpModel');
+// const trainingModel = require("./model/trainingModel")
 
 
 

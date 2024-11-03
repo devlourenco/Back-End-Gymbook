@@ -26,6 +26,6 @@ const modelTraining = connection.define("Treino", {
   },
 });
 
-modelTraining.sync({ force: true });
+// modelTraining.sync({ force: true });
 
 module.exports = modelTraining;

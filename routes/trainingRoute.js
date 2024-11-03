@@ -4,7 +4,7 @@ const { where } = require("sequelize");
 
 const router = express.Router();
 
-router.post("/training", (req, res) => {
+router.post("/InsertTraining", (req, res) => {
   let { grupo_muscular, exercicios, repeticoes, carga_do_treino } = req.body;
 
   trainingModel
@@ -29,11 +29,11 @@ router.post("/training", (req, res) => {
     });
 });
 
-router.get("listTraining/:idTreino", (req, res) => {
+router.get("/training/:idTreino", (req, res) => {
   let { idTreino } = req.params;
 
   trainingModel
-    .findByPK(idTreino)
+    .findByPk(idTreino)
     .then((training) => {
       if (!training) {
         return res.status(404).json({
@@ -56,7 +56,27 @@ router.get("listTraining/:idTreino", (req, res) => {
     });
 });
 
-router.delete("/deleteTraining/:idTreino", (req, res) => {
+//GET genérico
+router.get("/allTraining", (req, res) => {
+  trainingModel
+    .findAll()
+    .then((response) => {
+      return res.status(201).json({
+        errorStatus: false,
+        mensageStatus: "Listagem de Treinos",
+        data: response,
+      });
+    })
+    .catch((error) => {
+      return res.status(400).json({
+        errorStatus: true,
+        mensageStatus: "Erro ao listar treinos",
+        errorObject: error,
+      });
+    });
+});
+
+router.delete("/training/:idTreino", (req, res) => {
   let { idTreino } = req.params;
 
   trainingModel
