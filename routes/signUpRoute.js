@@ -1,5 +1,6 @@
 const express = require("express");
 const signUpModel = require("../model/signUpModel");
+const modelSignUp = require("../model/signUpModel");
 
 const router = express.Router();
 
@@ -26,6 +27,24 @@ router.post("/signup", (req, res) => {
       });
     });
 });
+
+router.get('/listAllUsers', (req, res) => {
+  modelSignUp.findAll().then(
+    (response) => {
+      return res.status(201).json({
+        errorStatus: false,
+        mensageStatus: "All Users",
+        data: response
+      })
+    }
+  ).catch((error) => {
+    return res.status(400).json({
+      errorStatus: true,
+      mensageStatus: "Error on list all users",
+      errorObject: error
+    })
+  })
+})
 
 router.get("/listUsers/:idCadastro", (req, res) => {
   let { idCadastro } = req.params;

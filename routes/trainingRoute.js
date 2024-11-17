@@ -1,6 +1,7 @@
 const express = require("express");
 const trainingModel = require("../model/trainingModel");
 const { where } = require("sequelize");
+const modelTraining = require("../model/trainingModel");
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.post("/InsertTraining", (req, res) => {
     });
 });
 
-router.get("/training/:idTreino", (req, res) => {
+router.get("/listTraining/:idTreino", (req, res) => {
   let { idTreino } = req.params;
 
   trainingModel
@@ -60,11 +61,11 @@ router.get("/training/:idTreino", (req, res) => {
 router.get("/allTraining", (req, res) => {
   trainingModel
     .findAll()
-    .then((response) => {
+    .then((trainings) => {
       return res.status(201).json({
         errorStatus: false,
         mensageStatus: "Listagem de Treinos",
-        data: response,
+        data: trainings,
       });
     })
     .catch((error) => {
@@ -76,7 +77,30 @@ router.get("/allTraining", (req, res) => {
     });
 });
 
-router.delete("/training/:idTreino", (req, res) => {
+router.put("/editTraining/:id", (req, res) => {
+  let { id } = req.params;
+  let { grupo_muscular, exercicios, repeticoes, carga_do_treino } = req.body;
+
+  modelTraining.update({
+    grupo_muscular, exercicios, repeticoes, carga_do_treino
+  }, 
+  { where: { idTreino: id } }).then(() => {
+    return res.status(200).json({
+      errorStatus: false,
+      mensageStatus: "Training edited"
+    })
+  }).catch((error) => {
+    return res.status(400).json({
+      errorStatus: true,
+      mensageStatus: "Erro ao editar",
+      errorObject: error
+    })
+  })
+});
+
+
+
+router.delete("/deleteTraining/:idTreino", (req, res) => {
   let { idTreino } = req.params;
 
   trainingModel
